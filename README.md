@@ -1,4 +1,5 @@
 # Minecraft Server Operating Scripts
+Is a collection of scripts/functions which aim at making the daily operations and setup of a Minecraft Server as simple need be. This script uses mcrcon from Tiiffi https://github.com/Tiiffi/mcrcon and rdiff-backup https://github.com/rdiff-backup/rdiff-backup.
 
 ## Before installing
 
