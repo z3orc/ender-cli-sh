@@ -71,7 +71,7 @@ The installation is quite simple and quick. Firstly make sure you have all the p
 
 Secondly, you can choose which folder you would prefer to be the new home of your server, or you can create a new one. Then navigate to your desired directory and paste this small snippet of code:
 
-`DIR=$(pwd); rm mcontrol; wget -O mcontrol https://git.io/Jle34; chmod +x mcontrol; cd $DIR`
+`DIR=$(pwd); rm mcontrol; wget -O mcontrol https://git.io/Jle0M; chmod +x mcontrol; cd $DIR`
 
 This will download the script, called mcontrol, to that folder. You might need to run `sudo chmod +x mcontrol` if the previous snippet of code does not do the trick. Anything after this point does not require sudo or root access.
 
