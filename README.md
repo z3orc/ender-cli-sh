@@ -1,1 +1,1 @@
-# Minecraft Server Operation Scripts
+# Minecraft Server Operating Scripts
