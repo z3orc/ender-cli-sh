@@ -59,15 +59,13 @@ setup() {
 
         DIR=$PWD
 
-        CONFIG="mcontrol.config"
-
         clear
 
         echo "              [Minecraft server setup]"
         echo "----------------------------------------------------"
 
-        rm $DIR/$CONFIG 2>/dev/null
-        touch $DIR/$CONFIG
+        rm $DIR/mcontrol.config 2>/dev/null
+        touch $DIR/mcontrol.config
 
         mkdir $DIR/serverfiles 2>/dev/null && mkdir $DIR/backups 2>/dev/null && mkdir $DIR/bin 2>/dev/null
         
@@ -120,18 +118,18 @@ setup() {
 
         #Writings settings to settingsfile
 
-        echo DIR="${DIR// /}" >> $DIR/$CONFIG | xargs
-        # echo VERSION="${VERSION// /}" >> $DIR/$CONFIG | xargs
-        echo FLAVOUR="${FLAVOUR// /}" >> $DIR/$CONFIG | xargs
-        echo RAM="${RAM// /}" >> $DIR/$CONFIG | xargs
-        echo PLAYER_COUNT="${PLAYER_COUNT// /}" >> $DIR/$CONFIG | xargs
-        echo WORLD_SEED="${WORLD_SEED// /}" >> $DIR/$CONFIG | xargs
-        echo PORT="${PORT// /}" >> $DIR/.$CONFIG | xargs
-        echo GAMEMODE="${GAMEMODE// /}" >> $DIR/$CONFIG | xargs
-        echo DIFFICULTY="${DIFFICULTY// /}" >> $DIR/$CONFIG | xargs
-        echo WHITELIST="${WHITELIST// /}" >> $DIR/$CONFIG | xargs
-        echo JAR="server.jar" >> $DIR/$CONFIG | xargs
-        echo RCONPASS="${RCONPASS// /}" >> $DIR/$CONFIG | xargs
+        echo DIR="${DIR// /}" >> $DIR/mcontrol.config | xargs
+        # echo VERSION="${VERSION// /}" >> $DIR/mcontrol.config | xargs
+        echo FLAVOUR="${FLAVOUR// /}" >> $DIR/mcontrol.config | xargs
+        echo RAM="${RAM// /}" >> $DIR/mcontrol.config | xargs
+        echo PLAYER_COUNT="${PLAYER_COUNT// /}" >> $DIR/mcontrol.config | xargs
+        echo WORLD_SEED="${WORLD_SEED// /}" >> $DIR/mcontrol.config | xargs
+        echo PORT="${PORT// /}" >> $DIR/.mcontrol.config | xargs
+        echo GAMEMODE="${GAMEMODE// /}" >> $DIR/mcontrol.config | xargs
+        echo DIFFICULTY="${DIFFICULTY// /}" >> $DIR/mcontrol.config | xargs
+        echo WHITELIST="${WHITELIST// /}" >> $DIR/mcontrol.config | xargs
+        echo JAR="server.jar" >> $DIR/mcontrol.config | xargs
+        echo RCONPASS="${RCONPASS// /}" >> $DIR/mcontrol.config | xargs
 
         #Writing certain settings to server.properties
 
@@ -207,7 +205,7 @@ setup() {
         echo "----------------------------------------------------"
 
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating settings file"
-        FILE=$DIR/$CONFIG
+        FILE=$DIR/mcontrol.config
         if test -f "$FILE"; then
                 echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Settings file validated"
         else
@@ -265,7 +263,7 @@ setup() {
 
         textclear
         
-        STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+        STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
         tmux has-session -t minecraft 2>/dev/null
 
         if [[ $? = 0 && $STATUS == "USE" ]]; then
@@ -281,7 +279,7 @@ setup() {
 start(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Starting server!"
 
@@ -289,7 +287,7 @@ start(){
 
         sleep 5
 
-        STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+        STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
         tmux has-session -t minecraft 2>/dev/null
         if [[ $? != 0 && $STATUS == "FREE" ]]; then
                 sleep 1
@@ -306,7 +304,7 @@ start(){
 boot_loop(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         cd $DIR/serverfiles || exit
 
@@ -324,7 +322,7 @@ boot_loop(){
 nw_start(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         cd $DIR/serverfiles
 
@@ -336,13 +334,13 @@ nw_start(){
 stop(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         cd $DIR || exit
 
         if [[ -z "$1" ]]; then
 
-                STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+                STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
                 tmux has-session -t minecraft 2>/dev/null
                 if [[ $? != 0 && $STATUS == "FREE" ]]; then
                         echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Cannot halt server. Server not running!"
@@ -357,7 +355,7 @@ stop(){
                         i="1"
                         while [ $i -lt 8 ] 
                         do      
-                                STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+                                STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
                                 FILE=$DIR/.offline
                                 if test -f "$FILE"; then
                                         if [[ $STATUS == "FREE" ]]; then
@@ -391,7 +389,7 @@ stop(){
 resume(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         $DIR/bin/mcrcon -p $RCONPASS -t
 }
@@ -399,7 +397,7 @@ resume(){
 upgrade() {
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         cd $DIR
 
@@ -473,7 +471,7 @@ upgrade() {
 
                 sleep 10
 
-                STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+                STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
 
                 if [[ $? = 0 && $STATUS == "USE" ]]; then
 
@@ -485,7 +483,7 @@ upgrade() {
                 else
                         echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate server integrity, upgrade did not work."
 
-                        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Reverting changes"
+                        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Reverting changes."
 
                         tmux kill-session -t minecraft 2>/dev/null
 
@@ -496,7 +494,9 @@ upgrade() {
 
                         rdiff-backup -r now $DIR/backups $DIR/serverfiles
 
-                        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating server integrity"
+                        echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Changes reverted!"
+
+                        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating server integrity."
                         
                         cd $DIR
 
@@ -512,10 +512,10 @@ upgrade() {
                         
                         sleep 10
 
-                        STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+                        STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
 
                         if [[ $? = 0 && $STATUS == "USE" ]]; then
-                                echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server integrity validated and changes reverted"
+                                echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server integrity validated!"
                                 exit
                         else
                                 echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate server integrity, server did not boot."
@@ -529,16 +529,17 @@ upgrade() {
 backup(){
         #!/bin/bash
 
-        source $CONFIG
+        source mcontrol.config
 
         if [[ $1 = "list" ]]; then
                 nice -n 10 rdiff-backup --list-increments $DIR/backups
                 exit 0
+        fi
 
         tmux has-session -t minecraft 2>/dev/null
-        STATUS=$(nc -z 127.0.0.1 $PORT && echo "USE" || echo "FREE")
+        STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
 
-        if [[ $? != 0 && $STATUS == "FREE" ]]; then
+        if [[ $? = 1 || $STATUS == "FREE" ]]; then
                 echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Cannot backup while server is not running"
                 exit 1
         else
