@@ -4,6 +4,6 @@
 
 ## Installing
 
-DIR=$(pwd); sudo rm mcontrol; sudo wget -O mcontrol https://git.io/Jle34; chmod +x mcontrol; cd $DIR
+`DIR=$(pwd); sudo rm mcontrol; sudo wget -O mcontrol https://git.io/Jle34; chmod +x mcontrol; cd $DIR`
 
 ## Usage
