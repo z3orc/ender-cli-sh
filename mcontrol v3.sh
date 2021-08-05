@@ -165,19 +165,19 @@ setup() {
 
         cd $DIR/bin
 
-        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading and unpacking java."
+        # echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading and unpacking java."
 
-        tput sc
+        # tput sc
 
-        curl -L -o openjdk.tar.gz 'https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz' --progress-bar
+        # curl -L -o openjdk.tar.gz 'https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz' --progress-bar
 
-        tar -xzf openjdk.tar.gz
+        # tar -xzf openjdk.tar.gz
 
-        rm openjdk.tar.gz
+        # rm openjdk.tar.gz
 
-        textclear
+        # textclear
 
-        echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Java downloaded and unpacked!"
+        # echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Java downloaded and unpacked!"
 
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading and unpacking mcrcon."
 
