@@ -1,4 +1,4 @@
-# Minecraft Server Operating Scripts
+# Minecraft Server Control
 Is a collection of scripts/functions which aim at making the daily operations and setup of a Minecraft Server as simple need be. This script uses mcrcon from Tiiffi https://github.com/Tiiffi/mcrcon and rdiff-backup https://github.com/rdiff-backup/rdiff-backup.
 
 ## Before installing
@@ -13,7 +13,6 @@ MSOS has not been tested on every OS/distro there is, I just don't really have t
 | Ubuntu 20.04 LTS       	|        ❔       	|     ✔️     	|       ✔️      	|
 | Ubuntu 19.04           	|        ✔️       	|     ✔️     	|       ❔      	|
 | Ubuntu 18.04 LTS       	|        ✔️       	|     ❔     	|       ❔      	|
-| Arch (as of July 2021) 	|        ❔       	|     ❔     	|       ✔️      	|
 | Debian 10              	|        ❔       	|     ✔️     	|       ❌      	|
 | Debian 9               	|        ✔️       	|     ✔️     	|       ❌      	|
 
