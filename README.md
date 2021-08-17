@@ -3,10 +3,10 @@ Is a collection of scripts/functions which aim at making the daily operations an
 
 ## Before installing
 
-Make sure you have all the necessary packages installed before downloading/installing or using MSOS. These packages will/might differ depending on your distro and which version of Minecraft. Below are some handy-dandy examples of which packages you will need for Ubuntu and Arch.
+Make sure you have all the necessary packages installed before downloading/installing or using mcontrol. These packages will/might differ depending on your distro and which version of Minecraft. Below are some handy-dandy examples of which packages you will need for Ubuntu and Arch.
 
 ### Compatibility
-MSOS has not been tested on every OS/distro there is, I just don't really have the time :), so here is a list of tested distros where the script did or did not work at the time of testing.
+Mcontrol has not been tested on every OS/distro there is, I just don't really have the time :), so here is a list of tested distros where the script did or did not work at the time of testing.
 
 |                        	| v1 (2019-2020) 	| v2 (pre 1.17) 	| v3 (Current) 	|
 |------------------------	|:----------------:	|:-----------:	|:--------------:	|
@@ -70,7 +70,7 @@ The installation is quite simple and quick. Firstly make sure you have all the p
 
 Secondly, you can choose which folder you would prefer to be the new home of your server, or you can create a new one. Then navigate to your desired directory and paste this small snippet of code:
 
-`DIR=$(pwd); rm mcontrol; wget -O mcontrol https://git.io/Jle0M; chmod +x mcontrol; cd $DIR`
+`DIR=$(pwd); rm mcontrol; wget -O mcontrol https://git.io/J0miv; chmod +x mcontrol; cd $DIR`
 
 This will download the script, called mcontrol, to that folder. You might need to run `sudo chmod +x mcontrol` if the previous snippet of code does not do the trick. Anything after this point does not require sudo or root access.
 
