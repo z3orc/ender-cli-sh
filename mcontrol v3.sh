@@ -223,14 +223,14 @@ setup() {
                 exit
         fi
 
-        echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating Java download"
-        FILE=$DIR/bin/jdk-16.0.1+9-jre
-        if test -d "$FILE"; then
-                echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Java validated"
-        else
-                echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate Java, try the setup again."
-                exit
-        fi
+        # echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating Java download"
+        # FILE=$DIR/bin/jdk-16.0.1+9-jre
+        # if test -d "$FILE"; then
+        #         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Java validated"
+        # else
+        #         echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate Java, try the setup again."
+        #         exit
+        # fi
 
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating mcrcon download"
         FILE=$DIR/bin/mcrcon
