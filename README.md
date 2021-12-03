@@ -143,7 +143,7 @@ If your server is running an old version and you would like to run the latest an
 
 `./ender.sh upgrade <version>` *Change <version> with the version-number you prefer.
  
-This script will backup your server and change the server jar so that the server runs the version you prefer. It can even roll back to a previous state, should the upgrade/update not work. ***However, it is your responsibility that the version you are upgrading from is compatible with the new version, and this script cannot completely protect the server from loss of data or corruption, just make it somewhat easier and safer.*** This script combined with common sense and caution would be a great combo!
+This script will backup your server and change the server jar so that the server runs the version you prefer. It can even roll back to a previous state, should the upgrade/update not work. ***However, it is your responsibility that the version you are upgrading from is compatible with the new version, and this script cannot completely protect the server from loss of data or corruption, just make it somewhat easier.*** This script combined with common sense and caution would be a great combo!
 
 
 ---
