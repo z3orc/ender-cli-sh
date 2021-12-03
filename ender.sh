@@ -81,7 +81,7 @@ function logBad {
 }
 
 function haltServer {
-    tmux send-keys -t minecraft "stop" ENTER
+    tmux send-keys -t minecraft-$ID "stop" ENTER
 }
 
 function killServer {
@@ -222,6 +222,7 @@ setup() {
     fi
 
     RCONPASS=$(openssl rand -base64 14)
+    ID=$(openssl rand -base64 14)
     PORT=25565
 
     tput sc
@@ -240,6 +241,7 @@ setup() {
     echo WHITELIST="${WHITELIST// /}" >> $DIR/ender.config | xargs
     echo JAR="server.jar" >> $DIR/ender.config | xargs
     echo RCONPASS="${RCONPASS// /}" >> $DIR/ender.config | xargs
+    echo ID="${ID// /}" >> $DIR/ender.config | xargs
 
     #Writing certain settings to server.properties
 
@@ -408,7 +410,7 @@ setup() {
     textclear
     
     STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
-    tmux has-session -t minecraft 2>/dev/null
+    tmux has-session -t minecraft-$ID 2>/dev/null
 
     if [[ $? = 0 && $STATUS == "USE" ]]; then
         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server integrity validated"
@@ -447,7 +449,7 @@ function start {
         setServerState offline
         killServer
     elif [[ $1 = "lazymc" ]]; then
-        tmux new -d -s minecraft $DIR/bin/lazymc/lazymc start
+        tmux new -d -s minecraft-$ID $DIR/bin/lazymc/lazymc start
     fi
 }
 
@@ -495,8 +497,8 @@ function backup {
 
     if isPortBinded 25565 && isSessionRunning minecraft && isServerRunning; then
         logNeutral "Starting backups process and saving world. This might cause server instability"
-        tmux send-keys -t minecraft "save-off" ENTER
-        tmux send-keys -t minecraft "save-all" ENTER
+        tmux send-keys -t minecraft-$ID "save-off" ENTER
+        tmux send-keys -t minecraft-$ID "save-all" ENTER
 
         sleep 10
         
@@ -510,7 +512,7 @@ function backup {
         nice -n 10 rdiff-backup --force --remove-older-than 8W $DIR/backups
         logGood "Old backups removed."
 
-        tmux send-keys -t minecraft "save-on" ENTER
+        tmux send-keys -t minecraft-$ID "save-on" ENTER
         logGood "Backup process complete."
     else
         logBad "Cannot backup while server is not running"
