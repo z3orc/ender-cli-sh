@@ -429,12 +429,12 @@ function start {
     if [[ $1 = "" ]]; then
         logNeutral "Starting server!"
 
-        bootServer minecraft
+        bootServer minecraft-$ID
 
         i=0
         while [ $i -lt 60 ];
         do
-            if isPortBinded 25565 && isSessionRunning minecraft && isServerRunning; then
+            if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
                 logGood "Server booted successfully"
                 setServerState online
                 exit 0
@@ -467,9 +467,9 @@ function stop {
     do
         if ! isPortBinded 25565 && ! isServerRunning; then
             logGood "Server halted successfully"
-            killServer minecraft
+            killServer minecraft-$ID
             setServerState offline
-            if ! isSessionRunning minecraft; then
+            if ! isSessionRunning minecraft-$ID; then
                 break
             fi
         else
@@ -495,7 +495,7 @@ function backup {
             exit 0
     fi
 
-    if isPortBinded 25565 && isSessionRunning minecraft && isServerRunning; then
+    if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
         logNeutral "Starting backups process and saving world. This might cause server instability"
         tmux send-keys -t minecraft-$ID "save-off" ENTER
         tmux send-keys -t minecraft-$ID "save-all" ENTER
@@ -584,7 +584,7 @@ function upgrade {
         logNeutral "Verifying server integrity"
         cd $DIR
         start
-        if isPortBinded 25565 && isSessionRunning minecraft && isServerRunning; then
+        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
             logGood "Server integrity has been successfully verified!" 
             exit 0
         else
@@ -592,7 +592,7 @@ function upgrade {
         fi
 
         logNeutral "Reverting changes."
-        killServer minecraft
+        killServer minecraft-$ID
         cd $DIR
         cp -r serverfiles corrupt-serverfiles
         rm serverfiles
@@ -603,7 +603,7 @@ function upgrade {
         tput sc
         start
         textclear
-        if isPortBinded 25565 && isSessionRunning minecraft && isServerRunning; then
+        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
             logGood "Server integrity has been successfully verified and changes has been reverted!" 
             exit 0
         else
