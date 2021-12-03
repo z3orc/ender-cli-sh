@@ -222,7 +222,7 @@ setup() {
     fi
 
     RCONPASS=$(openssl rand -base64 14)
-    ID=$(openssl rand -base64 14)
+    ID=$RANDOM
     PORT=25565
 
     tput sc
