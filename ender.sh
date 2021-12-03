@@ -377,7 +377,7 @@ setup() {
     fi
 
     echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating ender"
-    FILE=$DIR/ender
+    FILE=$DIR/ender.sh
     if test -f "$FILE"; then
             echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] ender validated"
     else
