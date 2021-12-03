@@ -62,7 +62,7 @@ function setServerState {
     if [ $1 = "offline" ]; then
         touch $DIR/.offline
     elif [ $1 = "online" ]; then
-        rm $DIR/.offline
+        rm -rf $DIR/.offline
     else 
         echo "Unknown argument!"
     fi
@@ -100,7 +100,7 @@ function bootServerLoop {
     i=0
     while [ $i -lt 4 ] 
     do
-            rm $DIR/.offline
+            rm -rf $DIR/.offline
             java -Xms$RAM -Xmx$RAM -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar $JAR nogui
             touch $DIR/.offline
             sleep 120;
@@ -174,15 +174,15 @@ setup() {
     echo "              [Minecraft server setup]"
     echo "----------------------------------------------------"
 
-    rm $DIR/ender.config 2>/dev/null
+    rm -rf $DIR/ender.config 2>/dev/null
     touch $DIR/ender.config
 
     mkdir $DIR/serverfiles 2>/dev/null && mkdir $DIR/backups 2>/dev/null && mkdir $DIR/bin 2>/dev/null
     
     cd serverfiles 2>/dev/null
 
-    rm server.properties 2>/dev/null
-    rm eula.txt 2>/dev/null
+    rm -rf server.properties 2>/dev/null
+    rm -rf eula.txt 2>/dev/null
 
     touch server.properties 2>/dev/null
     touch eula.txt 2>/dev/null
@@ -306,11 +306,11 @@ setup() {
 
     tar -xvf mcrcon.tar.gz
 
-    rm mcrcon.tar.gz
+    rm -rf mcrcon.tar.gz
 
     mv $DIR/bin/mcrcon-0.7.1-linux-x86-64/mcrcon $DIR/bin
 
-    rm -r mcrcon-0.7.1-linux-x86-64
+    rm  mcrcon-0.7.1-linux-x86-64
 
     textclear
 
@@ -544,12 +544,12 @@ function upgrade {
             cd $DIR/serverfiles
 
             if [[ $FLAVOUR == "fabric" ]]; then
-                rm server.jar
-                rm fabric-server-launch.jar
+                rm -rf server.jar
+                rm -rf fabric-server-launch.jar
                 rm -rf oldMods
                 mv mods oldMods
             else
-                rm server.jar
+                rm -rf server.jar
             fi
 
             if ! doesFileExist "$DIR/serverfiles/server.jar"; then
@@ -593,7 +593,7 @@ function upgrade {
         killServer minecraft
         cd $DIR
         cp -r serverfiles corrupt-serverfiles
-        rm -r serverfiles
+        rm serverfiles
         rdiff-backup -r now $DIR/backups $DIR/serverfiles
         
         logNeutral "Validating server integrity."
