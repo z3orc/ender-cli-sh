@@ -71,7 +71,7 @@ The installation is quite simple and quick. Firstly make sure you have all the p
 
 Secondly, you can choose which folder you would prefer to be the new home of your server, or you can create a new one. Then navigate to your desired directory and paste this small snippet of code:
 
-`DIR=$(pwd); rm ender; wget -O ender https://raw.githubusercontent.com/z3orc/ender/main/ender-v3.sh; chmod +x ender; cd $DIR`
+`DIR=$(pwd); rm ender.sh; wget -O ender.sh https://raw.githubusercontent.com/z3orc/ender/main/ender-v3.sh; chmod +x ender.sh; cd $DIR`
 
 This will download the script, called ender, to that folder. You might need to run `sudo chmod +x ender` if the previous snippet of code does not do the trick. Anything after this point does not require sudo or root access.
 
