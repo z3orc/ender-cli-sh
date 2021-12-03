@@ -71,7 +71,7 @@ The installation is quite simple and quick. Firstly make sure you have all the p
 
 Secondly, you can choose which folder you would prefer to be the new home of your server, or you can create a new one. Then navigate to your desired directory and paste this small snippet of code:
 
-`DIR=$(pwd); rm ender.sh; wget -O ender.sh https://raw.githubusercontent.com/z3orc/ender/main/ender-v3.sh; chmod +x ender.sh; cd $DIR`
+`DIR=$(pwd); rm ender.sh; wget -O ender.sh https://raw.githubusercontent.com/z3orc/ender/main/ender.sh; chmod +x ender.sh; cd $DIR`
 
 This will download the script, called ender, to that folder. You might need to run `sudo chmod +x ender` if the previous snippet of code does not do the trick. Anything after this point does not require sudo or root access.
 
@@ -95,7 +95,7 @@ If there are any configuration options which you do not understand, they are des
 
 If you would like to boot/start your server, just write:
 
-`./ender start`
+`./ender.sh start`
 
 This will start your server, and inform you if the server does not boot correctly.
 
@@ -105,11 +105,11 @@ This will start your server, and inform you if the server does not boot correctl
 
 If your server is already running, you can stop the server gracefully by using:
 
-`./ender stop`
+`./ender.sh stop`
 
 If your server is stubborn or has not responded for a long, long time, then you can use:
 
-`./ender stop -f` or `./ender stop --force`
+`./ender.sh stop -f` or `./ender.sh stop --force`
 
 This will force your server offline and will most likely result in a loss of data or a corrupted world, and is therefore not recommended. This is the polar opposite of >gracefully :)
 
@@ -119,7 +119,7 @@ This will force your server offline and will most likely result in a loss of dat
 
 If you would like to keep your server somewhat safe, you can use:
 
-`./ender backup`
+`./ender.sh backup`
 
 This will make a mirror of all your server files and move them to the backups-directory.
 
@@ -129,7 +129,7 @@ You can also make the process automatic, by using:
 
 and pasting:
 
-`@hourly /directory/of/your/server/ender backup`
+`@hourly /directory/of/your/server/ender.sh backup`
 
 This will backup your server every hour, which might use a lot of disk space.
 
@@ -141,7 +141,7 @@ This will backup your server every hour, which might use a lot of disk space.
 
 If your server is running an old version and you would like to run the latest and greatest then you can use:
 
-`./ender upgrade <version>` *Change <version> with the version-number you prefer.
+`./ender.sh upgrade <version>` *Change <version> with the version-number you prefer.
  
 This script will backup your server and change the server jar so that the server runs the version you prefer. It can even roll back to a previous state, should the upgrade/update not work. ***However, it is your responsibility that the version you are upgrading from is compatible with the new version, and this script cannot completely protect the server from loss of data or corruption, just make it somewhat easier and safer.*** This script combined with common sense and caution would be a great combo!
 

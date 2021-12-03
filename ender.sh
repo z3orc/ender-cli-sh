@@ -57,7 +57,7 @@ doesFolderExist(){
 }
 
 function setServerState {
-    source mcontrol.config
+    source ender.config
 
     if [ $1 = "offline" ]; then
         touch $DIR/.offline
@@ -89,11 +89,11 @@ function killServer {
 }
 
 function bootServer {
-    tmux new -d -s $1 ./mcontrol bootServerLoop
+    tmux new -d -s $1 ./ender.sh bootServerLoop
 }
 
 function bootServerLoop {
-    source mcontrol.config
+    source ender.config
 
     cd $DIR/serverfiles || exit
 
@@ -174,8 +174,8 @@ setup() {
     echo "              [Minecraft server setup]"
     echo "----------------------------------------------------"
 
-    rm $DIR/mcontrol.config 2>/dev/null
-    touch $DIR/mcontrol.config
+    rm $DIR/ender.config 2>/dev/null
+    touch $DIR/ender.config
 
     mkdir $DIR/serverfiles 2>/dev/null && mkdir $DIR/backups 2>/dev/null && mkdir $DIR/bin 2>/dev/null
     
@@ -228,18 +228,18 @@ setup() {
 
     #Writings settings to settingsfile
 
-    echo DIR="${DIR// /}" >> $DIR/mcontrol.config | xargs
-    # echo VERSION="${VERSION// /}" >> $DIR/mcontrol.config | xargs
-    echo FLAVOUR="${FLAVOUR// /}" >> $DIR/mcontrol.config | xargs
-    echo RAM="${RAM// /}" >> $DIR/mcontrol.config | xargs
-    echo PLAYER_COUNT="${PLAYER_COUNT// /}" >> $DIR/mcontrol.config | xargs
-    echo WORLD_SEED="${WORLD_SEED// /}" >> $DIR/mcontrol.config | xargs
-    echo PORT="${PORT// /}" >> $DIR/.mcontrol.config | xargs
-    echo GAMEMODE="${GAMEMODE// /}" >> $DIR/mcontrol.config | xargs
-    echo DIFFICULTY="${DIFFICULTY// /}" >> $DIR/mcontrol.config | xargs
-    echo WHITELIST="${WHITELIST// /}" >> $DIR/mcontrol.config | xargs
-    echo JAR="server.jar" >> $DIR/mcontrol.config | xargs
-    echo RCONPASS="${RCONPASS// /}" >> $DIR/mcontrol.config | xargs
+    echo DIR="${DIR// /}" >> $DIR/ender.config | xargs
+    # echo VERSION="${VERSION// /}" >> $DIR/ender.config | xargs
+    echo FLAVOUR="${FLAVOUR// /}" >> $DIR/ender.config | xargs
+    echo RAM="${RAM// /}" >> $DIR/ender.config | xargs
+    echo PLAYER_COUNT="${PLAYER_COUNT// /}" >> $DIR/ender.config | xargs
+    echo WORLD_SEED="${WORLD_SEED// /}" >> $DIR/ender.config | xargs
+    echo PORT="${PORT// /}" >> $DIR/.ender.config | xargs
+    echo GAMEMODE="${GAMEMODE// /}" >> $DIR/ender.config | xargs
+    echo DIFFICULTY="${DIFFICULTY// /}" >> $DIR/ender.config | xargs
+    echo WHITELIST="${WHITELIST// /}" >> $DIR/ender.config | xargs
+    echo JAR="server.jar" >> $DIR/ender.config | xargs
+    echo RCONPASS="${RCONPASS// /}" >> $DIR/ender.config | xargs
 
     #Writing certain settings to server.properties
 
@@ -255,9 +255,9 @@ setup() {
     fi
 
     if [[ $FLAVOUR == "fabric" ]]; then
-        echo JAR="fabric-server-launch.jar" >> $DIR/mcontrol.config | xargs
+        echo JAR="fabric-server-launch.jar" >> $DIR/ender.config | xargs
     else
-        echo JAR="server.jar" >> $DIR/mcontrol.config | xargs
+        echo JAR="server.jar" >> $DIR/ender.config | xargs
     fi
 
     textclear
@@ -340,7 +340,7 @@ setup() {
     echo "----------------------------------------------------"
 
     echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating settings file"
-    FILE=$DIR/mcontrol.config
+    FILE=$DIR/ender.config
     if test -f "$FILE"; then
             echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Settings file validated"
     else
@@ -376,12 +376,12 @@ setup() {
             exit
     fi
 
-    echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating mcontrol"
-    FILE=$DIR/mcontrol
+    echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating ender"
+    FILE=$DIR/ender
     if test -f "$FILE"; then
-            echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] mcontrol validated"
+            echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] ender validated"
     else
-            echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate mcontrol, try the setup again."
+            echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate ender, try the setup again."
             exit
     fi
 
@@ -401,7 +401,7 @@ setup() {
 
     tput sc
 
-    ./mcontrol start
+    ./ender.sh start
 
     sleep 15
 
@@ -422,7 +422,7 @@ setup() {
 
 function start {
     #!/bin/bash
-    source mcontrol.config
+    source ender.config
 
     if [[ $1 = "" ]]; then
         logNeutral "Starting server!"
@@ -454,7 +454,7 @@ function start {
 function stop {
     #!/bin/bash
 
-    source mcontrol.config
+    source ender.config
 
     logNeutral "Stopping server."
 
@@ -486,7 +486,7 @@ function stop {
 function backup {
     #!/bin/bash
 
-    source mcontrol.config
+    source ender.config
 
     if [[ $1 = "list" ]]; then
             nice -n 10 rdiff-backup --list-increments $DIR/backups
@@ -521,7 +521,7 @@ function backup {
 function upgrade {
     #!/bin/bash
 
-    source mcontrol.config
+    source ender.config
 
         cd $DIR
         clear
