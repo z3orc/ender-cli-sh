@@ -613,6 +613,11 @@ function upgrade {
 
 }
 
+function console {
+    source ender.config
+    tmux a -t minecraft-$ID
+}
+
 case "$1" in
         setup)
                 setup
@@ -631,6 +636,9 @@ case "$1" in
                 ;;
         upgrade)
                 upgrade "${2}"
+                ;;
+        console)
+                console
                 ;;
         *)
                 echo "Usage: $0 {start|resume|stop|upgrade|backup|setup}"
