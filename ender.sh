@@ -277,7 +277,7 @@ setup() {
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading server-jar VERSION=$VERSION, FLAVOUR=$FLAVOUR."
         tput sc
         cd $DIR/serverfiles
-        curl -L -o server.jar 'https://mcdl.z3orc.com/get?version='$VERSION'&flavour='$FLAVOUR --progress-bar
+        curl -L -o server.jar 'https://mcdl.z3orc.com/v1/'$FLAVOUR'/'$VERSION --progress-bar
         textclear
         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server-jar downloaded!"
     fi
@@ -566,7 +566,7 @@ function upgrade {
             if [[ $FLAVOUR == "fabric" ]]; then
                 java -jar $DIR/bin/fabric-installer.jar server -downloadMinecraft -snapshot -dir "$DIR/serverfiles" -mcversion "$NEW_VERSION"
             else
-                curl -L -o server.jar 'https://mcdl.z3orc.com/get?version='$NEW_VERSION'&flavour='$FLAVOUR --progress-bar
+                curl -L -o server.jar 'https://mcdl.z3orc.com/v1/'$FLAVOUR'/'$VERSION --progress-bar
             fi
 
             
