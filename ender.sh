@@ -566,7 +566,7 @@ function upgrade {
             if [[ $FLAVOUR == "fabric" ]]; then
                 java -jar $DIR/bin/fabric-installer.jar server -downloadMinecraft -snapshot -dir "$DIR/serverfiles" -mcversion "$NEW_VERSION"
             else
-                curl -L -o server.jar 'https://mcdl.z3orc.com/v1/'$FLAVOUR'/'$VERSION --progress-bar
+                curl -L -o server.jar 'https://mcdl.z3orc.com/v1/'$FLAVOUR'/'$NEW_VERSION --progress-bar
             fi
 
             
@@ -595,7 +595,7 @@ function upgrade {
         killServer minecraft-$ID
         cd $DIR
         cp -r serverfiles corrupt-serverfiles
-        rm serverfiles
+        rm -rf serverfiles
         rdiff-backup -r now $DIR/backups $DIR/serverfiles
         
         logNeutral "Validating server integrity."
