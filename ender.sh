@@ -437,13 +437,15 @@ function start {
             if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
                 logGood "Server booted successfully"
                 setServerState online
-                exit 0
+                break
             else
                 echo "..."
                 i=$[$i+1]
                 sleep 2
             fi
         done
+
+        if 
 
         logBad "Could not boot server."
         setServerState offline
@@ -482,6 +484,7 @@ function stop {
     if isPortBinded 25565 || isServerRunning || isSessionRunning; then
         logBad "Could not halt server."
         setServerState online
+        exit 1
     fi
 }
 
@@ -490,12 +493,7 @@ function backup {
 
     source ender.config
 
-    if [[ $1 = "list" ]]; then
-            nice -n 10 rdiff-backup --list-increments $DIR/backups
-            exit 0
-    fi
-
-    if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+    function save {
         logNeutral "Starting backups process and saving world. This might cause server instability"
         tmux send-keys -t minecraft-$ID "save-off" ENTER
         tmux send-keys -t minecraft-$ID "save-all" ENTER
@@ -514,9 +512,20 @@ function backup {
 
         tmux send-keys -t minecraft-$ID "save-on" ENTER
         logGood "Backup process complete."
+    }
+
+    if [[ $1 = "list" ]]; then
+            nice -n 10 rdiff-backup --list-increments $DIR/backups
+    fi
+
+    if [[ $1 = "revert" ]]; then
+            rdiff-backup -r now $DIR/backups $DIR/serverfiles
+    fi
+
+    if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+        stop && save
     else
-        logBad "Cannot backup while server is not running"
-        exit 1
+        save
     fi
 }
 
