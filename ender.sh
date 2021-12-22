@@ -445,7 +445,7 @@ function start {
             fi
         done
 
-        if ! isPortBinded 25565 || ! isServerRunning || ! isSessionRunning; then
+        if ! isPortBinded 25565 || ! isServerRunning || ! isSessionRunning minecraft-$ID; then
         logBad "Could not boot server."
         setServerState offline
         exit 1
@@ -482,7 +482,7 @@ function stop {
         fi
     done
 
-    if isPortBinded 25565 || isServerRunning || isSessionRunning; then
+    if isPortBinded 25565 || isServerRunning || isSessionRunning minecraft-$ID; then
         logBad "Could not halt server."
         setServerState online
         exit 1
