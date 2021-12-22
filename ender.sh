@@ -445,11 +445,12 @@ function start {
             fi
         done
 
-        if 
-
+        if !isPortBinded 25565 || !isServerRunning || !isSessionRunning; then
         logBad "Could not boot server."
         setServerState offline
-        killServer
+        exit 1
+        fi 
+        
     elif [[ $1 = "lazymc" ]]; then
         tmux new -d -s minecraft-$ID $DIR/bin/lazymc/lazymc start
     fi
