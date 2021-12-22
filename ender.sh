@@ -496,7 +496,7 @@ function backup {
 
     function save {
         logNeutral "Starting backups process and saving world. This might cause server instability"
-        
+
         sleep 10
         
         logGood "World save complete!"
@@ -509,7 +509,6 @@ function backup {
         nice -n 10 rdiff-backup --force --remove-older-than 2W $DIR/backups
         logGood "Old backups removed."
 
-        tmux send-keys -t minecraft-$ID "save-on" ENTER
         logGood "Backup process complete."
     }
 
