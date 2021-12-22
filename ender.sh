@@ -496,9 +496,7 @@ function backup {
 
     function save {
         logNeutral "Starting backups process and saving world. This might cause server instability"
-        tmux send-keys -t minecraft-$ID "save-off" ENTER
-        tmux send-keys -t minecraft-$ID "save-all" ENTER
-
+        
         sleep 10
         
         logGood "World save complete!"
