@@ -461,32 +461,38 @@ function stop {
 
     source ender.config
 
-    logNeutral "Stopping server."
-
-    haltServer
-
-    i=0
-    while [[ $i -lt 60 ]];
-    do
-        if ! isPortBinded 25565 && ! isServerRunning; then
-            logGood "Server halted successfully"
-            killServer minecraft-$ID
-            setServerState offline
-            if ! isSessionRunning minecraft-$ID; then
-                break
-            fi
-        else
-            echo "..."
-            i=$[$i+1]
-            sleep 2
-        fi
-    done
-
     if isPortBinded 25565 || isServerRunning || isSessionRunning minecraft-$ID; then
-        logBad "Could not halt server."
-        setServerState online
-        exit 1
+        logNeutral "Stopping server."
+
+        haltServer
+
+        i=0
+        while [[ $i -lt 60 ]];
+        do
+            if ! isPortBinded 25565 && ! isServerRunning; then
+                logGood "Server halted successfully"
+                killServer minecraft-$ID
+                setServerState offline
+                if ! isSessionRunning minecraft-$ID; then
+                    break
+                fi
+            else
+                echo "..."
+                i=$[$i+1]
+                sleep 2
+            fi
+        done
+
+        if isPortBinded 25565 || isServerRunning || isSessionRunning minecraft-$ID; then
+            logBad "Could not halt server."
+            setServerState online
+            exit 1
+        fi
+    else
+        logBad "Could not perform request. Server not running."
     fi
+
+    
 }
 
 function backup {
@@ -502,11 +508,11 @@ function backup {
         logGood "World save complete!"
 
         logNeutral "Running rdiff-backup."
-        nice -n 10 rdiff-backup $DIR/serverfiles $DIR/backups
+        nice -n 10 rdiff-backup $DIR/serverfiles $DIR/backups 2>/dev/null
         logGood "rdiff-backup complete."
 
         logNeutral "Removing old backups."
-        nice -n 10 rdiff-backup --force --remove-older-than 2W $DIR/backups
+        nice -n 10 rdiff-backup --force --remove-older-than 2W $DIR/backups 2>/dev/null
         logGood "Old backups removed."
 
         logGood "Backup process complete."
@@ -521,9 +527,9 @@ function backup {
     fi
 
     if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
-        stop && save
+        stop && save && start
     else
-        save
+        save && start
     fi
 }
 
