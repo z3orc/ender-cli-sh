@@ -520,17 +520,16 @@ function backup {
 
     if [[ $1 = "list" ]]; then
             nice -n 10 rdiff-backup --list-increments $DIR/backups
-    fi
-
-    if [[ $1 = "revert" ]]; then
+    elif [[ $1 = "revert" ]]; then
             rdiff-backup -r now $DIR/backups $DIR/serverfiles
+    else
+        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+        stop && save && start
+        else
+            save && start
+        fi
     fi
 
-    if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
-        stop && save && start
-    else
-        save && start
-    fi
 }
 
 function upgrade {
