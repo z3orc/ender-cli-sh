@@ -320,23 +320,23 @@ setup() {
 
     # echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Java downloaded and unpacked!"
 
-    echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading and unpacking mcrcon."
+    # echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading and unpacking mcrcon."
 
-    tput sc
+    # tput sc
 
-    curl -L -o mcrcon.tar.gz "https://github.com/Tiiffi/mcrcon/releases/download/v0.7.1/mcrcon-0.7.1-linux-x86-64.tar.gz" --progress-bar
+    # curl -L -o mcrcon.tar.gz "https://github.com/Tiiffi/mcrcon/releases/download/v0.7.1/mcrcon-0.7.1-linux-x86-64.tar.gz" --progress-bar
 
-    tar -xvf mcrcon.tar.gz
+    # tar -xvf mcrcon.tar.gz
 
-    rm -rf mcrcon.tar.gz
+    # rm -rf mcrcon.tar.gz
 
-    mv $DIR/bin/mcrcon-0.7.1-linux-x86-64/mcrcon $DIR/bin
+    # mv $DIR/bin/mcrcon-0.7.1-linux-x86-64/mcrcon $DIR/bin
 
-    rm  mcrcon-0.7.1-linux-x86-64
+    # rm  mcrcon-0.7.1-linux-x86-64
 
-    textclear
+    # textclear
 
-    echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] mcrcon downloaded and unpacked!"
+    # echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] mcrcon downloaded and unpacked!"
 
 
     sleep 2
@@ -389,14 +389,14 @@ setup() {
     #         exit
     # fi
 
-    echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating mcrcon download"
-    FILE=$DIR/bin/mcrcon
-    if test -f "$FILE"; then
-            echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] mcrcon validated"
-    else
-            echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate mcrcon, try the setup again."
-            exit
-    fi
+    # echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating mcrcon download"
+    # FILE=$DIR/bin/mcrcon
+    # if test -f "$FILE"; then
+    #         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] mcrcon validated"
+    # else
+    #         echo "[  $(tput setaf 1)ERROR$(tput sgr 0)  ] Could not validate mcrcon, try the setup again."
+    #         exit
+    # fi
 
     echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Validating ender"
     FILE=$DIR/ender.sh
