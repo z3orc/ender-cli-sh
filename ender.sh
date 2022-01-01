@@ -108,6 +108,24 @@ function bootServerLoop {
     done
 }
 
+function save {
+    logNeutral "Starting backups process and saving world. This might cause server instability"
+
+    sleep 10
+    
+    logGood "World save complete!"
+
+    logNeutral "Running rdiff-backup."
+    nice -n 10 rdiff-backup $DIR/serverfiles $DIR/backups 2>/dev/null
+    logGood "rdiff-backup complete."
+
+    logNeutral "Removing old backups."
+    nice -n 10 rdiff-backup --force --remove-older-than 2W $DIR/backups 2>/dev/null
+    logGood "Old backups removed."
+
+    logGood "Backup process complete."
+}
+
 # Functions for controlling the server
 
 textclear(){
@@ -201,6 +219,8 @@ setup() {
 
     IFS= read -r -p "Enter difficulty (easy, normal, hard, peaceful): " DIFFICULTY
 
+    IFS= read -r -p "Enter port (*25565): " PORT
+
     IFS= read -r -p "Whitelist (y/n): " WHITELIST
 
     tput sc
@@ -223,7 +243,6 @@ setup() {
 
     RCONPASS=$(openssl rand -base64 14)
     ID=$RANDOM
-    PORT=25565
 
     tput sc
 
@@ -238,9 +257,10 @@ setup() {
     echo PORT="${PORT// /}" >> $DIR/.ender.config | xargs
     echo GAMEMODE="${GAMEMODE// /}" >> $DIR/ender.config | xargs
     echo DIFFICULTY="${DIFFICULTY// /}" >> $DIR/ender.config | xargs
+    echo PORT="${PORT// /}" >> $DIR/ender.config | xargs
     echo WHITELIST="${WHITELIST// /}" >> $DIR/ender.config | xargs
     echo JAR="server.jar" >> $DIR/ender.config | xargs
-    echo RCONPASS="${RCONPASS// /}" >> $DIR/ender.config | xargs
+    # echo RCONPASS="${RCONPASS// /}" >> $DIR/ender.config | xargs
     echo ID="${ID// /}" >> $DIR/ender.config | xargs
 
     #Writing certain settings to server.properties
@@ -249,8 +269,8 @@ setup() {
     echo level-seed="${WORLD_SEED// /}" >> server.properties | xargs
     echo gamemode="${GAMEMODE// /}" >> server.properties | xargs
     echo difficulty="${DIFFICULTY// /}" >> server.properties | xargs
-    echo enable-rcon="true" >> $DIR/serverfiles/server.properties | xargs
-    echo rcon.password="${RCONPASS// /}" >> $DIR/serverfiles/server.properties | xargs
+    # echo enable-rcon="true" >> $DIR/serverfiles/server.properties | xargs
+    # echo rcon.password="${RCONPASS// /}" >> $DIR/serverfiles/server.properties | xargs
     
     if [[ $WHITELIST == "y" || $WHITELIST == "Y" ]]; then
         echo white-list="true" >> server.properties | xargs
@@ -412,7 +432,7 @@ setup() {
     STATUS=$(nc -z 127.0.0.1 25565 && echo "USE" || echo "FREE")
     tmux has-session -t minecraft-$ID 2>/dev/null
 
-    if [[ $? = 0 && $STATUS == "USE" ]]; then
+    if isPortBinded $PORT && isSessionRunning minecraft-$ID && isServerRunning; then
         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server integrity validated"
         exit
     else
@@ -434,7 +454,7 @@ function start {
         i=0
         while [ $i -lt 60 ];
         do
-            if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+            if isPortBinded $PORT && isSessionRunning minecraft-$ID && isServerRunning; then
                 logGood "Server booted successfully"
                 setServerState online
                 break
@@ -445,7 +465,7 @@ function start {
             fi
         done
 
-        if ! isPortBinded 25565 || ! isServerRunning || ! isSessionRunning minecraft-$ID; then
+        if ! isPortBinded $PORT || ! isServerRunning || ! isSessionRunning minecraft-$ID; then
         logBad "Could not boot server."
         setServerState offline
         exit 1
@@ -461,7 +481,7 @@ function stop {
 
     source ender.config
 
-    if isPortBinded 25565 || isServerRunning || isSessionRunning minecraft-$ID; then
+    if isPortBinded $PORT || isServerRunning || isSessionRunning minecraft-$ID; then
         logNeutral "Stopping server."
 
         haltServer
@@ -469,7 +489,7 @@ function stop {
         i=0
         while [[ $i -lt 60 ]];
         do
-            if ! isPortBinded 25565 && ! isServerRunning; then
+            if ! isPortBinded $PORT && ! isServerRunning; then
                 logGood "Server halted successfully"
                 killServer minecraft-$ID
                 setServerState offline
@@ -483,7 +503,7 @@ function stop {
             fi
         done
 
-        if isPortBinded 25565 || isServerRunning || isSessionRunning minecraft-$ID; then
+        if isPortBinded $PORT || isServerRunning || isSessionRunning minecraft-$ID; then
             logBad "Could not halt server."
             setServerState online
             exit 1
@@ -500,31 +520,13 @@ function backup {
 
     source ender.config
 
-    function save {
-        logNeutral "Starting backups process and saving world. This might cause server instability"
-
-        sleep 10
-        
-        logGood "World save complete!"
-
-        logNeutral "Running rdiff-backup."
-        nice -n 10 rdiff-backup $DIR/serverfiles $DIR/backups 2>/dev/null
-        logGood "rdiff-backup complete."
-
-        logNeutral "Removing old backups."
-        nice -n 10 rdiff-backup --force --remove-older-than 2W $DIR/backups 2>/dev/null
-        logGood "Old backups removed."
-
-        logGood "Backup process complete."
-    }
-
     if [[ $1 = "list" ]]; then
             nice -n 10 rdiff-backup --list-increments $DIR/backups
     elif [[ $1 = "revert" ]]; then
             rdiff-backup -r now $DIR/backups $DIR/serverfiles
     else
-        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
-        stop && save && start
+        if isPortBinded $PORT && isSessionRunning minecraft-$ID && isServerRunning; then
+            stop && save && start
         else
             save && start
         fi
@@ -551,7 +553,7 @@ function upgrade {
 
         logNeutral "Backing up serverfiles and stopping server... This might take some time."
 
-        backup && stop
+        stop && save
 
         if ! isSessionRunning; then
             logNeutral "Removing old server.jar"
@@ -596,7 +598,7 @@ function upgrade {
         logNeutral "Verifying server integrity"
         cd $DIR
         start
-        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+        if isPortBinded $PORT && isSessionRunning minecraft-$ID && isServerRunning; then
             logGood "Server integrity has been successfully verified!" 
             exit 0
         else
@@ -615,7 +617,7 @@ function upgrade {
         tput sc
         start
         textclear
-        if isPortBinded 25565 && isSessionRunning minecraft-$ID && isServerRunning; then
+        if isPortBinded $PORT && isSessionRunning minecraft-$ID && isServerRunning; then
             logGood "Server integrity has been successfully verified and changes has been reverted!" 
             exit 0
         else
