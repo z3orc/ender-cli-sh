@@ -290,7 +290,7 @@ setup() {
     sleep 2
 
     if [[ $FLAVOUR == "fabric" ]]; then
-        wget -O fabric-installer.jar 'https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.9.0/fabric-installer-0.9.0.jar'
+        wget -O fabric-installer.jar 'https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.10.2/fabric-installer-0.10.2.jar'
         mv fabric-installer.jar $DIR/bin/
         java -jar $DIR/bin/fabric-installer.jar server -downloadMinecraft -snapshot -dir "$DIR/serverfiles" -mcversion "$VERSION"
     else
