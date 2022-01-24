@@ -269,7 +269,7 @@ setup() {
     echo level-seed="${WORLD_SEED// /}" >> server.properties | xargs
     echo gamemode="${GAMEMODE// /}" >> server.properties | xargs
     echo difficulty="${DIFFICULTY// /}" >> server.properties | xargs
-    # echo enable-rcon="true" >> $DIR/serverfiles/server.properties | xargs
+    echo enable-rcon="false" >> $DIR/serverfiles/server.properties | xargs
     # echo rcon.password="${RCONPASS// /}" >> $DIR/serverfiles/server.properties | xargs
     
     if [[ $WHITELIST == "y" || $WHITELIST == "Y" ]]; then
