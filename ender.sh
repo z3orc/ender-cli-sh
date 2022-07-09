@@ -243,7 +243,7 @@ setup() {
 
     RCONPASS=$(openssl rand -base64 14)
     ID=$RANDOM
-
+    DOWNLOAD_URL="https://mcdl.z3orc.com/"
     tput sc
 
     #Writings settings to settingsfile
@@ -262,6 +262,7 @@ setup() {
     echo JAR="server.jar" >> $DIR/ender.config | xargs
     # echo RCONPASS="${RCONPASS// /}" >> $DIR/ender.config | xargs
     echo ID="${ID// /}" >> $DIR/ender.config | xargs
+    echo DOWNLOAD_URL="${DOWNLOAD_URL// /}" >> $DIR/ender.config | xargs
 
     #Writing certain settings to server.properties
 
@@ -297,7 +298,7 @@ setup() {
         echo "[  $(tput setaf 3).....$(tput sgr 0)  ] Downloading server-jar VERSION=$VERSION, FLAVOUR=$FLAVOUR."
         tput sc
         cd $DIR/serverfiles
-        curl -L -o server.jar 'https://mcdl.smoothcaveman.net/v2/'$FLAVOUR'/'$VERSION'/download' --progress-bar
+        curl -L -o server.jar $DOWNLOAD_URL''$FLAVOUR'/'$VERSION --progress-bar
         textclear
         echo "[ $(tput setaf 2)SUCCESS$(tput sgr 0) ] Server-jar downloaded!"
     fi
@@ -580,7 +581,7 @@ function upgrade {
             if [[ $FLAVOUR == "fabric" ]]; then
                 java -jar $DIR/bin/fabric-installer.jar server -downloadMinecraft -snapshot -dir "$DIR/serverfiles" -mcversion "$NEW_VERSION"
             else
-                curl -L -o server.jar 'https://mcdl.smoothcaveman.net/v2/'$FLAVOUR'/'$VERSION'/download' --progress-bar
+                curl -L -o server.jar $DOWNLOAD_URL''$FLAVOUR'/'$NEW_VERSION --progress-bar
             fi
 
             
@@ -655,5 +656,5 @@ case "$1" in
                 console
                 ;;
         *)
-                echo "Usage: $0 {start|resume|stop|upgrade|backup|setup}"
+                echo "Usage: $0 {start|stop|console|upgrade|backup|setup}"
 esac
