@@ -243,7 +243,7 @@ setup() {
 
     RCONPASS=$(openssl rand -base64 14)
     ID=$RANDOM
-    DOWNLOAD_URL="https://mcdl.z3orc.com/"
+    DOWNLOAD_URL="https://dynamic.z3orc.com/"
     tput sc
 
     #Writings settings to settingsfile
